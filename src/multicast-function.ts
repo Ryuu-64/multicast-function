@@ -5,14 +5,16 @@ export class MulticastFunction<T extends (...args: any[]) => any> {
         return this.functions.length;
     }
 
-    add(func: T): boolean {
+    add(func: T | MulticastFunction<T>): boolean {
         if (func === null || func === undefined) {
             return false;
         }
 
-        const length = this.functions.length;
-        const newLength = this.functions.push(func);
-        return newLength > length;
+        if (typeof func === 'function') {
+            return this.addFunction(func);
+        } else /* if (typeof func === 'object') */ {
+            return this.addMulticastFunction(func);
+        }
     }
 
     invoke(...args: Parameters<T>): ReturnType<T> {
@@ -23,24 +25,60 @@ export class MulticastFunction<T extends (...args: any[]) => any> {
         return returnValue!;
     }
 
-    remove(funcToBeRemove: T): boolean {
-        if (funcToBeRemove === null || funcToBeRemove === undefined) {
+    remove(func: T | MulticastFunction<T>): boolean {
+        if (func === null || func === undefined) {
             return false;
         }
 
-        return MulticastFunction.removeLastMatchedElement(
-            this.functions,
-            func => func === funcToBeRemove
-        );
+        if (typeof func === 'function') {
+            return this.removeFunction(func);
+        } else /* if (typeof func === 'object') */ {
+            return this.removeMulticastFunction(func);
+        }
     }
 
-    private static removeLastMatchedElement<T>(array: T[], removeIf: (element: T) => boolean): boolean {
-        for (let index = array.length - 1; index >= 0; index--) {
-            if (removeIf(array[index])) {
-                array.splice(index, 1);
+    private addFunction(func: T): boolean {
+        const length = this.functions.length;
+        const newLength = this.functions.push(func);
+        return newLength > length;
+    }
+
+    private addMulticastFunction(func: MulticastFunction<T>): boolean {
+        const length = this.functions.length;
+        const newLength = this.functions.push(...func.functions);
+        return newLength > length;
+    }
+
+    private removeFunction(func: T): boolean {
+        for (let index = this.functions.length - 1; index >= 0; index--) {
+            if (this.functions[index] === func) {
+                this.functions.splice(index, 1);
                 return true;
             }
         }
         return false;
+    }
+
+    private removeMulticastFunction(multicast: MulticastFunction<T>): boolean {
+        const sourceLength = length;
+        const targetLength = multicast.length;
+
+        for (let index = sourceLength - targetLength; index >= 0; index--) {
+            if (this.equal(multicast.functions, index, targetLength)) {
+                this.functions.splice(index, targetLength);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private equal(functions: T[], start: number, count: number): boolean {
+        for (let i = 0; i < count; i++) {
+            if (!(this.functions[i + start] === functions[i])) {
+                return false;
+            }
+        }
+        return true;
     }
 }
