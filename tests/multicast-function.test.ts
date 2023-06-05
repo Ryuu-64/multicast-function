@@ -10,12 +10,14 @@ describe('MulticastFunction', () => {
     });
     it('add null', () => {
         const multicastFunction = new MulticastFunction<() => void>();
+        // @ts-ignore
         const isAdd = multicastFunction.add(null);
         expect(isAdd).toBe(false);
         expect(multicastFunction.length).toBe(0);
     });
     it('add undefined', () => {
         const multicastFunction = new MulticastFunction<() => void>();
+        // @ts-ignore
         const isAdd = multicastFunction.add(undefined);
         expect(isAdd).toBe(false);
         expect(multicastFunction.length).toBe(0);
@@ -27,6 +29,7 @@ describe('MulticastFunction', () => {
         const isFuncAdd = multicastFunction.add(func);
         expect(isFuncAdd).toBe(true);
 
+        // @ts-ignore
         const isNullAdd = multicastFunction.add(null);
         expect(isNullAdd).toBe(false);
     });
@@ -112,6 +115,7 @@ describe('MulticastFunction', () => {
         };
         multicastFunction.add(func);
 
+        // @ts-ignore
         const isEquals = multicastFunction.equals(null);
 
         expect(isEquals).toBe(false);
@@ -122,6 +126,7 @@ describe('MulticastFunction', () => {
         };
         multicastFunction.add(func);
 
+        // @ts-ignore
         const isEquals = multicastFunction.equals(undefined);
 
         expect(isEquals).toBe(false);
@@ -210,12 +215,14 @@ describe('MulticastFunction', () => {
     });
     it('remove null', () => {
         const multicastFunction = new MulticastFunction<() => void>();
+        // @ts-ignore
         const isRemove = multicastFunction.remove(null);
         expect(isRemove).toBe(false);
         expect(multicastFunction.length).toBe(0);
     });
     it('remove undefined', () => {
         const multicastFunction = new MulticastFunction<() => void>();
+        // @ts-ignore
         const isRemove = multicastFunction.remove(undefined);
         expect(isRemove).toBe(false);
         expect(multicastFunction.length).toBe(0);

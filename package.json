@@ -7,6 +7,8 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test",
     "npm-check": "npm-check"
   },
   "keywords": [
