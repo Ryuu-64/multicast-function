@@ -1,6 +1,6 @@
 {
   "name": "multicast-function",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "multicast-function write in typescript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

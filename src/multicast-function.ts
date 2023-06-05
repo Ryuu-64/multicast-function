@@ -25,6 +25,24 @@ export class MulticastFunction<T extends (...args: any[]) => any> {
         return returnValue!;
     }
 
+    equals(multicastFunction: MulticastFunction<T>): boolean {
+        if (!multicastFunction) {
+            return false;
+        }
+
+        if (this.functions.length !== multicastFunction.functions.length) {
+            return false;
+        }
+
+        for (let i = 0; i < this.functions.length; i++) {
+            if (this.functions[i] !== multicastFunction.functions[i]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     remove(func: T | MulticastFunction<T>): boolean {
         if (func === null || func === undefined) {
             return false;
@@ -60,7 +78,7 @@ export class MulticastFunction<T extends (...args: any[]) => any> {
     }
 
     private removeMulticastFunction(multicast: MulticastFunction<T>): boolean {
-        const sourceLength = length;
+        const sourceLength = this.length;
         const targetLength = multicast.length;
 
         for (let index = sourceLength - targetLength; index >= 0; index--) {

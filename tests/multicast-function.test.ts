@@ -30,6 +30,21 @@ describe('MulticastFunction', () => {
         const isNullAdd = multicastFunction.add(null);
         expect(isNullAdd).toBe(false);
     });
+    it('add multicast', () => {
+        const multicastFunction1 = new MulticastFunction<() => void>();
+        const func = () => {
+        };
+        multicastFunction1.add(func);
+        multicastFunction1.add(func);
+
+        const multicastFunction2 = new MulticastFunction<() => void>();
+        multicastFunction2.add(func);
+        multicastFunction2.add(func);
+
+        const isAdd = multicastFunction1.add(multicastFunction2);
+        expect(isAdd).toBe(true);
+        expect(multicastFunction1.length).toBe(4);
+    });
     it('repeat add', () => {
         const multicastFunction = new MulticastFunction<() => void>();
         const func = () => {
@@ -48,6 +63,68 @@ describe('MulticastFunction', () => {
         multicastFunction.add(func);
         multicastFunction.invoke();
         expect(value).toBe(1);
+    });
+    it('equals', () => {
+        const multicastFunction1 = new MulticastFunction<() => void>();
+        const func = () => {
+        };
+        multicastFunction1.add(func);
+
+        const multicastFunction2 = new MulticastFunction<() => void>();
+        multicastFunction2.add(func);
+
+        const isEquals = multicastFunction1.equals(multicastFunction2);
+
+        expect(isEquals).toBe(true);
+    });
+    it('equals length not equals', () => {
+        const multicastFunction1 = new MulticastFunction<() => void>();
+        const func = () => {
+        };
+        multicastFunction1.add(func);
+
+        const multicastFunction2 = new MulticastFunction<() => void>();
+        multicastFunction2.add(func);
+        multicastFunction2.add(func);
+
+        const isEquals = multicastFunction1.equals(multicastFunction2);
+
+        expect(isEquals).toBe(false);
+    });
+    it('equals function not equals', () => {
+        const multicastFunction1 = new MulticastFunction<() => void>();
+        const func1 = () => {
+        };
+        multicastFunction1.add(func1);
+
+        const multicastFunction2 = new MulticastFunction<() => void>();
+        const func2 = () => {
+        };
+        multicastFunction2.add(func2);
+
+        const isEquals = multicastFunction1.equals(multicastFunction2);
+
+        expect(isEquals).toBe(false);
+    });
+    it('equals null', () => {
+        const multicastFunction = new MulticastFunction<() => void>();
+        const func = () => {
+        };
+        multicastFunction.add(func);
+
+        const isEquals = multicastFunction.equals(null);
+
+        expect(isEquals).toBe(false);
+    });
+    it('equals undefined', () => {
+        const multicastFunction = new MulticastFunction<() => void>();
+        const func = () => {
+        };
+        multicastFunction.add(func);
+
+        const isEquals = multicastFunction.equals(undefined);
+
+        expect(isEquals).toBe(false);
     });
     it('remove', () => {
         const multicastFunction = new MulticastFunction<() => void>();
@@ -86,6 +163,50 @@ describe('MulticastFunction', () => {
         multicastFunction.add(func);
         multicastFunction.remove(func);
         expect(multicastFunction.length).toBe(1);
+    });
+    it('remove multicast', () => {
+        const multicastFunction1 = new MulticastFunction<() => void>();
+        const func1 = () => {
+        };
+        const func2 = () => {
+        };
+        multicastFunction1.add(func1);
+        multicastFunction1.add(func2);
+        multicastFunction1.add(func1);
+        multicastFunction1.add(func1);
+        multicastFunction1.add(func2);
+
+        const multicastFunction2 = new MulticastFunction<() => void>();
+        multicastFunction2.add(func1);
+        multicastFunction2.add(func2);
+
+        const isRemove = multicastFunction1.remove(multicastFunction2);
+        expect(isRemove).toBe(true);
+        expect(multicastFunction1.length).toBe(3);
+
+        const multicastFunction3 = new MulticastFunction<() => void>();
+        multicastFunction3.add(func1);
+        multicastFunction3.add(func2);
+        multicastFunction3.add(func1);
+        const isEquals = multicastFunction1.equals(multicastFunction3);
+        expect(isEquals).toBe(true);
+    });
+    it('remove not exist multicast', () => {
+        const multicastFunction1 = new MulticastFunction<() => void>();
+        const func1 = () => {
+        };
+        multicastFunction1.add(func1);
+        multicastFunction1.add(func1);
+
+        const multicastFunction2 = new MulticastFunction<() => void>();
+        const func2 = () => {
+        };
+        multicastFunction2.add(func2);
+        multicastFunction2.add(func2);
+
+        const isRemove = multicastFunction1.remove(multicastFunction2);
+        expect(isRemove).toBe(false);
+        expect(multicastFunction1.length).toBe(2);
     });
     it('remove null', () => {
         const multicastFunction = new MulticastFunction<() => void>();
