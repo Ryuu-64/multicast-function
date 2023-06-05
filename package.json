@@ -11,7 +11,9 @@
   },
   "keywords": [
     "function",
-    "multicast"
+    "multicast",
+    "event",
+    "delegate"
   ],
   "author": "ryuu-64",
   "license": "MIT",
