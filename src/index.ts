@@ -1,3 +1,3 @@
-import {MulticastFunction} from './multicast-function'
+import {MulticastFunction} from './multicast-function';
 
-export {MulticastFunction}
+export {MulticastFunction};

@@ -55,6 +55,10 @@ export class MulticastFunction<T extends (...args: any[]) => any> {
         }
     }
 
+    clear(): void {
+        this.functions.splice(0);
+    }
+
     private addFunction(func: T): boolean {
         const length = this.functions.length;
         const newLength = this.functions.push(func);

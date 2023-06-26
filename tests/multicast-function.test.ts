@@ -228,4 +228,13 @@ describe('MulticastFunction', () => {
         multicastFunction.add(func);
         expect(multicastFunction.length).toBe(2);
     });
+    it('clear', () => {
+        const multicastFunction = new MulticastFunction<() => void>();
+        const func = () => {
+        };
+        multicastFunction.add(func);
+        multicastFunction.add(func);
+        multicastFunction.clear();
+        expect(multicastFunction.length).toBe(0);
+    });
 });
