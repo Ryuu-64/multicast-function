@@ -17,12 +17,12 @@ export class MulticastFunction<T extends (...args: any[]) => any> {
         }
     }
 
-    invoke(...args: Parameters<T>): ReturnType<T> {
-        let returnValue: ReturnType<T>;
+    invoke(...args: Parameters<T>): ReturnType<T> | undefined {
+        let returnValue: ReturnType<T> | undefined;
         this.functions.forEach(
             (func: T) => returnValue = func(...args)
         );
-        return returnValue!;
+        return returnValue;
     }
 
     equals(multicastFunction: MulticastFunction<T>): boolean {
