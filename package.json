@@ -4,6 +4,12 @@
   "description": "multicast-function write in typescript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist/",
+    "LICENSE",
+    "README.md",
+    "readme/README.zh-cn.md"
+  ],
   "scripts": {
     "build": "tsc",
     "test": "jest",
