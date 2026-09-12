@@ -7,6 +7,7 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
+    "typecheck:test": "tsc --project tsconfig.test.json",
     "prepare": "npm run build",
     "prepublishOnly": "npm test",
     "npm-check": "npm ls --all"
