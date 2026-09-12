@@ -64,6 +64,22 @@ describe('MulticastFunction', () => {
         multicastFunction.invoke();
         expect(value).toBe(1);
     });
+    it('invoke with no registered functions returns undefined', () => {
+        const multicastFunction = new MulticastFunction<() => number>();
+
+        expect(multicastFunction.invoke()).toBeUndefined();
+    });
+    it('invoke returns the result of the last registered function', () => {
+        const multicastFunction = new MulticastFunction<(value: number) => number>();
+        const first = jest.fn((value: number) => value + 1);
+        const last = jest.fn((value: number) => value * 2);
+        multicastFunction.add(first);
+        multicastFunction.add(last);
+
+        expect(multicastFunction.invoke(3)).toBe(6);
+        expect(first).toHaveBeenCalledWith(3);
+        expect(last).toHaveBeenCalledWith(3);
+    });
     it('equals', () => {
         const multicastFunction1 = new MulticastFunction<() => void>();
         const func = () => {
