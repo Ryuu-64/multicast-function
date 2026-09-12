@@ -19,7 +19,7 @@ export class MulticastFunction<T extends (...args: any[]) => any> {
 
     invoke(...args: Parameters<T>): ReturnType<T> | undefined {
         let returnValue: ReturnType<T> | undefined;
-        this.functions.forEach(
+        this.functions.slice().forEach(
             (func: T) => returnValue = func(...args)
         );
         return returnValue;
