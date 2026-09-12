@@ -80,6 +80,79 @@ describe('MulticastFunction', () => {
         expect(first).toHaveBeenCalledWith(3);
         expect(last).toHaveBeenCalledWith(3);
     });
+    it('self-removal during invoke preserves registration order and the last result', () => {
+        const multicastFunction = new MulticastFunction<() => number>();
+        const calls: string[] = [];
+        const first = () => {
+            calls.push('first');
+            multicastFunction.remove(first);
+            return 1;
+        };
+        multicastFunction.add(first);
+        multicastFunction.add(() => { calls.push('second'); return 2; });
+        multicastFunction.add(() => { calls.push('third'); return 3; });
+
+        expect(multicastFunction.invoke()).toBe(3);
+        expect(calls).toEqual(['first', 'second', 'third']);
+        expect(multicastFunction.length).toBe(2);
+        calls.length = 0;
+        expect(multicastFunction.invoke()).toBe(3);
+        expect(calls).toEqual(['second', 'third']);
+    });
+    it('removing a later callback during invoke affects only later invocations', () => {
+        const multicastFunction = new MulticastFunction<() => number>();
+        const calls: string[] = [];
+        const last = () => { calls.push('last'); return 2; };
+        multicastFunction.add(() => {
+            calls.push('first');
+            multicastFunction.remove(last);
+            return 1;
+        });
+        multicastFunction.add(last);
+
+        expect(multicastFunction.invoke()).toBe(2);
+        expect(calls).toEqual(['first', 'last']);
+        expect(multicastFunction.length).toBe(1);
+        calls.length = 0;
+        expect(multicastFunction.invoke()).toBe(1);
+        expect(calls).toEqual(['first']);
+    });
+    it('clear during invoke affects only later invocations', () => {
+        const multicastFunction = new MulticastFunction<() => number>();
+        const calls: string[] = [];
+        multicastFunction.add(() => {
+            calls.push('first');
+            multicastFunction.clear();
+            return 1;
+        });
+        multicastFunction.add(() => { calls.push('last'); return 2; });
+
+        expect(multicastFunction.invoke()).toBe(2);
+        expect(calls).toEqual(['first', 'last']);
+        expect(multicastFunction.length).toBe(0);
+        calls.length = 0;
+        expect(multicastFunction.invoke()).toBeUndefined();
+        expect(calls).toEqual([]);
+    });
+    it('adding a callback during invoke affects only later invocations', () => {
+        const multicastFunction = new MulticastFunction<() => number>();
+        const calls: string[] = [];
+        const added = () => { calls.push('added'); return 3; };
+        multicastFunction.add(() => {
+            calls.push('first');
+            multicastFunction.add(added);
+            return 1;
+        });
+        multicastFunction.add(() => { calls.push('second'); return 2; });
+
+        expect(multicastFunction.invoke()).toBe(2);
+        expect(calls).toEqual(['first', 'second']);
+        expect(multicastFunction.length).toBe(3);
+        calls.length = 0;
+        expect(multicastFunction.invoke()).toBe(3);
+        expect(calls).toEqual(['first', 'second', 'added']);
+        expect(multicastFunction.length).toBe(4);
+    });
     it('equals', () => {
         const multicastFunction1 = new MulticastFunction<() => void>();
         const func = () => {
