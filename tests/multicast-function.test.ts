@@ -180,6 +180,32 @@ describe('MulticastFunction', () => {
         multicastFunction.remove(func);
         expect(multicastFunction.length).toBe(1);
     });
+    it('remove empty multicast from an empty target returns false', () => {
+        const target = new MulticastFunction<() => void>();
+        const empty = new MulticastFunction<() => void>();
+
+        expect(target.remove(empty)).toBe(false);
+        expect(target.length).toBe(0);
+        expect(target.equals(empty)).toBe(true);
+    });
+    it('remove empty multicast preserves callbacks in a non-empty target', () => {
+        const target = new MulticastFunction<() => void>();
+        const first = jest.fn();
+        const second = jest.fn();
+        target.add(first);
+        target.add(second);
+        target.add(first);
+        const expected = new MulticastFunction<() => void>();
+        expected.add(target);
+        const empty = new MulticastFunction<() => void>();
+
+        expect(target.remove(empty)).toBe(false);
+        expect(target.length).toBe(3);
+        expect(target.equals(expected)).toBe(true);
+        target.invoke();
+        expect(first).toHaveBeenCalledTimes(2);
+        expect(second).toHaveBeenCalledTimes(1);
+    });
     it('remove multicast', () => {
         const multicastFunction1 = new MulticastFunction<() => void>();
         const func1 = () => {
