@@ -85,6 +85,10 @@ export class MulticastFunction<T extends (...args: any[]) => any> {
         const sourceLength = this.length;
         const targetLength = multicast.length;
 
+        if (targetLength === 0) {
+            return false;
+        }
+
         for (let index = sourceLength - targetLength; index >= 0; index--) {
             if (this.equal(multicast.functions, index, targetLength)) {
                 this.functions.splice(index, targetLength);
