@@ -8,7 +8,11 @@ Call multiple subscribed functions in registration order, with the same argument
 
 ```sh
 npm install multicast-function
+# or the same code under the @ryuu-64 scope:
+npm install @ryuu-64/multicast-function
 ```
+
+Both names are published at the same version. With the scoped package, use `@ryuu-64/multicast-function` instead of `multicast-function` in the imports below.
 
 TypeScript (type declarations are included):
 

@@ -8,7 +8,11 @@
 
 ```sh
 npm install multicast-function
+# 或者安装 @ryuu-64 作用域下的同一份代码：
+npm install @ryuu-64/multicast-function
 ```
+
+两个包名发布的是同一版本。若安装作用域包，把下面示例中的 `multicast-function` 换成 `@ryuu-64/multicast-function` 即可。
 
 TypeScript（包中已包含类型声明）：
 
